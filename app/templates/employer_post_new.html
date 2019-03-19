@@ -387,7 +387,8 @@
 					 			</div>
 					 		</div>
 					 		<div class="profile-form-edit">
-					 			<form method="post" onclick="{% url 'save_job_details' %}" action="{% url 'save_job_details' %}">
+					 			<form method="post" action="{% url 'save_job_details' %}">
+									{% csrf_token %}
 					 				<div class="row">
 					 					<div class="col-lg-12">
 					 						<span class="pf-title">Job Title</span>
@@ -548,6 +549,9 @@
 					 					</div>
 
 					 				</div>
+									<div class="col-lg-12">
+					 						<button type="submit" onclick="{% url 'save_job_details' %}">Submit</button>
+					 					</div>
 					 			</form>
 					 		</div>
 					 		<div class="contact-edit">
