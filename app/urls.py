@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^employer_logout/$', app_views.employer_logout, name='employer_logout'),
     url(r'^authenticate_employer/$', app_views.employer_login, name='authenticate_employer'),
     url(r'^employer_dashboard/$', app_views.show_employer_dashboard, name='employer_dashboard'),
+    url(r'^save_job_details/$', app_views.save_job_details, name='save_job_details'),
 ]
 
 if settings.DEBUG:
