@@ -10,6 +10,13 @@ urlpatterns = [
     url(r'^authenticate_employer/$', app_views.employer_login, name='authenticate_employer'),
     url(r'^employer_dashboard/$', app_views.show_employer_dashboard, name='employer_dashboard'),
     url(r'^save_job_details/$', app_views.save_job_details, name='save_job_details'),
+    url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
+    url(r'^candidate_signup/$', app_views.candidate_signup, name='candidate_signup'),
+    url(r'^candidate_login/$', app_views.candidate_login, name='candidate_login'),
+    url(r'^candidate_dashboard/$', app_views.candidate_dashboard, name='candidate_dashboard'),
+    url(r'^candidate_profile_basic/$', app_views.candidate_profile_basic, name='candidate_profile_basic'),
+    url(r'^candidate_profile_career/$', app_views.candidate_profile_career, name='candidate_profile_career'),
+    url(r'^add_education/$', app_views.add_education, name='add_education'),
 ]
 
 if settings.DEBUG:
