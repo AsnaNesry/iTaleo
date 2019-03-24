@@ -17,6 +17,9 @@ urlpatterns = [
     url(r'^candidate_profile_basic/$', app_views.candidate_profile_basic, name='candidate_profile_basic'),
     url(r'^candidate_profile_career/$', app_views.candidate_profile_career, name='candidate_profile_career'),
     url(r'^add_education/$', app_views.add_education, name='add_education'),
+    url(r'^add_work_experience/$', app_views.add_work_experience, name='add_work_experience'),
+    url(r'^add_skill_set/$', app_views.add_skill_set, name='add_skill_set'),
+    url(r'^candidate_logout/$', app_views.candidate_logout, name='candidate_logout'),
 ]
 
 if settings.DEBUG:

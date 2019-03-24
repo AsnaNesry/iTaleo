@@ -39,4 +39,46 @@ class JobDetailsForm(ModelForm):
                   'maximum_salary',
                   'career_level', 'minimum_experience', 'maximum_experience', 'required_gender', 'industry',
                   'qualification',
-                  'application_deadline', 'key_skills', 'country', 'city', 'status']
+                  'application_deadline', 'key_skills', 'country', 'city']
+
+
+class EducationDetails(models.Model):
+    qualification = models.CharField(max_length=100)
+    specialization = models.CharField(max_length=100)
+    from_date = models.DateField()
+    to_date = models.DateField()
+    percentage = models.IntegerField(default=0)
+    institution = models.CharField(max_length=100)
+
+
+class EducationDetailsForm(ModelForm):
+    class Meta:
+        model = EducationDetails
+        fields = ['qualification', 'specialization', 'from_date', 'to_date', 'percentage', 'institution']
+
+
+class WorkExperience(models.Model):
+    job_title = models.CharField(max_length=100)
+    from_date = models.DateField()
+    to_date = models.DateField()
+    is_present_job = models.BooleanField(default=False)
+    company_name = models.CharField(max_length=100)
+    project_details = models.CharField(max_length=500)
+
+
+class WorkExperienceForm(ModelForm):
+    class Meta:
+        model = WorkExperience
+        fields = ['job_title', 'from_date', 'to_date', 'is_present_job', 'company_name', 'project_details']
+
+
+class SkillSet(models.Model):
+    skill_name = models.CharField(max_length=100)
+    skill_percentage = models.IntegerField(default=0)
+
+
+class SkillSetForm(ModelForm):
+    class Meta:
+        model = SkillSet
+        fields = ['skill_name', 'skill_percentage']
+

@@ -7,7 +7,9 @@ from django.views import View
 from django.contrib.auth import logout
 from .models import JobDetailsForm
 from .models import JobDetails
-from django.http import JsonResponse
+from .models import EducationDetailsForm
+from .models import WorkExperienceForm
+from .models import SkillSetForm
 
 
 # Create your views here.
@@ -49,6 +51,7 @@ def employer_logout(request):
 
 
 def save_job_details(request):
+    errors = []
     if request.method == 'POST':
         form = JobDetailsForm(request.POST)
         user = request.user
@@ -57,10 +60,9 @@ def save_job_details(request):
             job_details.created_by = user
             job_details.save()
             return redirect('employer_dashboard')
-    else:
-        form = JobDetailsForm()
-
-    return redirect(request, '/employer_post_new.html')
+        else:
+            print("Err")
+    return render(request, 'employer_post_new.html', {'errors': errors})
 
 
 def candidate_signup(request):
@@ -108,29 +110,121 @@ def candidate_profile_basic(request):
 
 
 def candidate_profile_career(request):
-    return render(request, 'candidates_profile_career.html')
+    education_return_list = []
+    work_experience_return_list = []
+    skill_set_return_list = []
+    if 'education_details' in request.session:
+        education_details = request.session['education_details']
+        populate_education_return_list(education_details, education_return_list)
+    if 'work_experience_details' in request.session:
+        work_experience_details = request.session['work_experience_details']
+        populate_work_experience_return_list(work_experience_details, work_experience_return_list)
+    if 'skill_details' in request.session:
+        skill_details = request.session['skill_details']
+        populate_skill_set(skill_details, skill_set_return_list)
+    return render(request, 'candidates_profile_career.html', {'education_return_list': education_return_list,
+                                                              'work_experience_return_list': work_experience_return_list,
+                                                              'skill_set_return_list': skill_set_return_list})
 
 
 def add_education(request):
     education_details = []
-    added_detail = EducationDetails(request.POST.get('qualification'), request.POST.get('specialization'),
-                                    request.POST.get('from_date'),
-                                    request.POST.get('to_date'), request.POST.get('percentage'),
-                                    request.POST.get('institution'))
-    if 'education_details' in request.session:
-        education_details = request.session['education_details']
-    else:
-        print("Nothing")
-    education_details.append(added_detail)
-    request.session['education_details'] = education_details
-    return render(request, 'candidates_profile_career.html', {'education_details': education_details})
+    if request.method == 'POST':
+        form = EducationDetailsForm(request.POST)
+        if form.is_valid:
+            qualification = request.POST.get('qualification')
+            specialization = request.POST.get('specialization')
+            from_date = request.POST.get('from_date')
+            to_date = request.POST.get('to_date')
+            percentage = request.POST.get('percentage')
+            institution = request.POST.get('institution')
+            added_detail = {'qualification': qualification, 'specialization': specialization,
+                            'from_date': from_date,
+                            'to_date': to_date, 'percentage': percentage, 'institution': institution}
+            if 'education_details' in request.session:
+                education_details = request.session['education_details']
+            education_details.append(added_detail)
+            request.session['education_details'] = education_details
+    return redirect('candidate_profile_career')
 
 
-class EducationDetails(object):
-    def __init__(self, qualification, specialization, from_date, to_date, percentage, institution):
-        self.qualification = qualification
-        self.specialization = specialization
-        self.from_date = from_date
-        self.to_date = to_date
-        self.percentage = percentage
-        self.institution = institution
+def populate_education_return_list(education_details, return_list):
+    if education_details is not None:
+        for num, element in enumerate(education_details):
+            qualification = element['qualification']
+            specialization = element['specialization']
+            from_date = element['from_date']
+            to_date = element['to_date']
+            percentage = element['percentage']
+            institution = element['institution']
+            current_element = {'qualification': qualification, 'specialization': specialization,
+                               'from_date': from_date,
+                               'to_date': to_date, 'percentage': percentage, 'institution': institution}
+            return_list.append(current_element)
+
+
+def add_work_experience(request):
+    work_experience_details = []
+    if request.method == 'POST':
+        form = WorkExperienceForm(request.POST)
+        if form.is_valid:
+            job_title = request.POST.get('job_title')
+            from_date = request.POST.get('from_date')
+            to_date = request.POST.get('to_date')
+            is_present_job = request.POST.get('is_present_job')
+            company_name = request.POST.get('company_name')
+            project_details = request.POST.get('project_details')
+            added_detail = {'job_title': job_title, 'is_present_job': is_present_job,
+                            'from_date': from_date,
+                            'to_date': to_date, 'company_name': company_name, 'project_details': project_details}
+            if 'work_experience_details' in request.session:
+                work_experience_details = request.session['work_experience_details']
+            work_experience_details.append(added_detail)
+            request.session['work_experience_details'] = work_experience_details
+    return redirect('candidate_profile_career')
+
+
+def populate_work_experience_return_list(work_experience_details, return_list):
+    if work_experience_details is not None:
+        for num, element in enumerate(work_experience_details):
+            job_title = element['job_title']
+            is_present_job = element['is_present_job']
+            from_date = element['from_date']
+            to_date = element['to_date']
+            company_name = element['company_name']
+            project_details = element['project_details']
+            current_element = {'job_title': job_title, 'is_present_job': is_present_job,
+                               'from_date': from_date,
+                               'to_date': to_date, 'project_details': project_details,
+                               'company_name': company_name}
+            return_list.append(current_element)
+
+
+def add_skill_set(request):
+    skill_details = []
+    if request.method == 'POST':
+        form = SkillSetForm(request.POST)
+        if form.is_valid:
+            skill_name = request.POST.get('skill_name')
+            skill_percentage = request.POST.get('skill_percentage')
+            added_detail = {'skill_name': skill_name, 'skill_percentage': skill_percentage}
+            if 'skill_details' in request.session:
+                skill_details = request.session['skill_details']
+            skill_details.append(added_detail)
+            request.session['skill_details'] = skill_details
+    return redirect('candidate_profile_career')
+
+
+def populate_skill_set(skill_details, return_list):
+    if skill_details is not None:
+        for num, element in enumerate(skill_details):
+            skill_name = element['skill_name']
+            skill_percentage = element['skill_percentage']
+            current_element = {'skill_name': skill_name, 'skill_percentage': skill_percentage}
+            return_list.append(current_element)
+
+
+def candidate_logout(request):
+    logout(request)
+    return redirect('')
+

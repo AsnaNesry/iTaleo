@@ -64,28 +64,31 @@
                     <aside class="col-lg-3 column border-right">
                         <div class="widget">
                             <div class="tree_widget-sec">
-				 				<ul>
-									<li>
-				 						<a href="/candidate_dashboard" title=""><i class="la la-folder"></i>Candidate Dashboard</a>
-				 					</li>
-				 					<li>
-				 						<a href="/candidate_profile" title=""><i class="la la-file-text"></i>View My Profile</a>
-				 					</li>
-				 					<li>
-				 						<a href="/candidate_profile_basic" title=""><i class="la la-user"></i>Basic Details</a>
-				 					</li>
-				 					<li>
-				 						<a href="#" title=""><i class="la la-money"></i>Education & Career Details</a>
-				 					</li>
-									<li>
-				 						<a href="#" title=""><i class="la la-search"></i>Search Job</a>
-				 					</li>
-				 					<li>
-				 						<a href="#" title=""><i class="la la-lock"></i>Change Password</a>
-				 					</li>
-				 					<li><a href="#" title=""><i class="la la-unlink"></i>Logout</a></li>
-				 				</ul>
-				 			</div>
+                                <ul>
+                                    <li>
+                                        <a href="/candidate_dashboard" title=""><i class="la la-folder"></i>Candidate
+                                            Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a href="/candidate_profile" title=""><i class="la la-file-text"></i>View My
+                                            Profile</a>
+                                    </li>
+                                    <li>
+                                        <a href="/candidate_profile_basic" title=""><i class="la la-user"></i>Basic
+                                            Details</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" title=""><i class="la la-money"></i>Education & Career Details</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" title=""><i class="la la-search"></i>Search Job</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" title=""><i class="la la-lock"></i>Change Password</a>
+                                    </li>
+                                    <li><a href="/candidate_logout" title=""><i class="la la-unlink"></i>Logout</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </aside>
                     <div class="col-lg-9 column">
@@ -100,15 +103,15 @@
                                                 </button>
                                             </div>
                                             <div class="edu-history-sec">
+
+                                                {% for education in education_return_list %}
                                                 <div class="edu-history">
                                                     <i class="la la-graduation-cap"></i>
                                                     <div class="edu-hisinfo">
-                                                        <h3>University</h3>
-                                                        <i>2008 - 2012</i>
-                                                        <span>Middle East Technical University <i>Computer Science</i></span>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                            Proin a ipsum tellus. Interdum et malesuada fames ac ante
-                                                            ipsum primis in faucibus.</p>
+                                                        <h3>{{ education.qualification }}</h3>
+                                                        <i>{{ education.from_date }} - {{ education.to_date }}</i>
+                                                        <span>{{	education.institution }} <i>{{	education.specialization }}</i></span>
+                                                        <p>{{ education.percentage }}%</p>
                                                     </div>
                                                     <ul class="action_job">
                                                         <li><span>Edit</span><a href="#" title=""><i
@@ -117,35 +120,24 @@
                                                                 class="la la-trash-o"></i></a></li>
                                                     </ul>
                                                 </div>
-                                                <div class="edu-history">
-                                                    <i class="la la-graduation-cap"></i>
-                                                    <div class="edu-hisinfo">
-                                                        <h3>High School</h3>
-                                                        <i>2008 - 2012</i>
-                                                        <span>Tomms College <i>Bachlors in Fine Arts</i></span>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                            Proin a ipsum tellus. Interdum et malesuada fames ac ante
-                                                            ipsum primis in faucibus.</p>
-                                                    </div>
-                                                    <ul class="action_job">
-                                                        <li><span>Edit</span><a href="#" title=""><i
-                                                                class="la la-pencil"></i></a></li>
-                                                        <li><span>Delete</span><a href="#" title=""><i
-                                                                class="la la-trash-o"></i></a></li>
-                                                    </ul>
-                                                </div>
+                                                {% endfor %}
                                             </div>
-                                            <div class="border-title"><h3>Work Experience</h3><a href="#" title=""><i
-                                                    class="la la-plus"></i> Add Experience</a></div>
+                                            <div class="border-title"><h3>Work Experience</h3>
+                                                <button type="button" class="btn btn-info btn-lg" data-toggle="modal"
+                                                        data-target="#work-experience-modal">Add Work Experience
+                                                </button>
+                                            </div>
                                             <div class="edu-history-sec">
+                                                {% for work in work_experience_return_list %}
+
+
                                                 <div class="edu-history style2">
                                                     <i></i>
                                                     <div class="edu-hisinfo">
-                                                        <h3>Web Designer <span>Inwave Studio</span></h3>
-                                                        <i>2008 - 2012</i>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                            Proin a ipsum tellus. Interdum et malesuada fames ac ante
-                                                            ipsum primis in faucibus.</p>
+                                                        <h3>{{ work.job_title }}<span>{{ work.company_name }}</span>
+                                                        </h3>
+                                                        <i>{{ work.from_date }} - {{ work.to_date }}</i>
+                                                        <p>{{ work.project_details }}</p>
                                                     </div>
                                                     <ul class="action_job">
                                                         <li><span>Edit</span><a href="#" title=""><i
@@ -154,77 +146,22 @@
                                                                 class="la la-trash-o"></i></a></li>
                                                     </ul>
                                                 </div>
-                                                <div class="edu-history style2">
-                                                    <i></i>
-                                                    <div class="edu-hisinfo">
-                                                        <h3>CEO Founder <span>Inwave Studio</span></h3>
-                                                        <i>2008 - 2012</i>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                            Proin a ipsum tellus. Interdum et malesuada fames ac ante
-                                                            ipsum primis in faucibus.</p>
-                                                    </div>
-                                                    <ul class="action_job">
-                                                        <li><span>Edit</span><a href="#" title=""><i
-                                                                class="la la-pencil"></i></a></li>
-                                                        <li><span>Delete</span><a href="#" title=""><i
-                                                                class="la la-trash-o"></i></a></li>
-                                                    </ul>
-                                                </div>
+                                                {% endfor %}
                                             </div>
 
-                                            <div class="border-title"><h3>Professional Skills</h3><a href="#"
-                                                                                                     title=""><i
-                                                    class="la la-plus"></i> Add Skills</a></div>
-                                            <div class="progress-sec">
-                                                <div class="progress-sec with-edit">
-                                                    <span>Adobe Photoshop</span>
-                                                    <div class="progressbar">
-                                                        <div class="progress" style="width: 80%;"><span>80%</span></div>
-                                                    </div>
-                                                    <ul class="action_job">
-                                                        <li><span>Edit</span><a href="#" title=""><i
-                                                                class="la la-pencil"></i></a></li>
-                                                        <li><span>Delete</span><a href="#" title=""><i
-                                                                class="la la-trash-o"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="progress-sec with-edit">
-                                                    <span>Production In Html</span>
-                                                    <div class="progressbar">
-                                                        <div class="progress" style="width: 60%;"><span>60%</span></div>
-                                                    </div>
-                                                    <ul class="action_job">
-                                                        <li><span>Edit</span><a href="#" title=""><i
-                                                                class="la la-pencil"></i></a></li>
-                                                        <li><span>Delete</span><a href="#" title=""><i
-                                                                class="la la-trash-o"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="progress-sec with-edit">
-                                                    <span>Graphic Design</span>
-                                                    <div class="progressbar">
-                                                        <div class="progress" style="width: 75%;"><span>75%</span></div>
-                                                    </div>
-                                                    <ul class="action_job">
-                                                        <li><span>Edit</span><a href="#" title=""><i
-                                                                class="la la-pencil"></i></a></li>
-                                                        <li><span>Delete</span><a href="#" title=""><i
-                                                                class="la la-trash-o"></i></a></li>
-                                                    </ul>
-                                                </div>
+                                            <div class="border-title"><h3>Professional Skills</h3>
+                                                <button type="button" class="btn btn-info btn-lg" data-toggle="modal"
+                                                        data-target="#skill-modal">Add Skills
+                                                </button>
                                             </div>
-                                            <div class="border-title"><h3>Awards & Achievements</h3><a href="#"
-                                                                                                       title=""><i
-                                                    class="la la-plus"></i> Add Skills</a></div>
-                                            <div class="edu-history-sec">
-                                                <div class="edu-history style2">
-                                                    <i></i>
-                                                    <div class="edu-hisinfo">
-                                                        <h3>Perfect Attendance Programs</h3>
-                                                        <i>2008 - 2012</i>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                            Proin a ipsum tellus. Interdum et malesuada fames ac ante
-                                                            ipsum primis in faucibus.</p>
+                                            <div class="progress-sec">
+                                                {% for skill in skill_set_return_list %}
+                                                <div class="progress-sec with-edit">
+                                                    <span>{{ skill.skill_name }}</span>
+                                                    <div class="progressbar">
+                                                        <div class="progress"
+                                                             style="width: {{ skill.skill_percentage }}%;"><span>{{ skill.skill_percentage }}%</span>
+                                                        </div>
                                                     </div>
                                                     <ul class="action_job">
                                                         <li><span>Edit</span><a href="#" title=""><i
@@ -233,128 +170,30 @@
                                                                 class="la la-trash-o"></i></a></li>
                                                     </ul>
                                                 </div>
-                                                <div class="edu-history style2">
-                                                    <i></i>
-                                                    <div class="edu-hisinfo">
-                                                        <h3>Top Performer Recognition</h3>
-                                                        <i>2008 - 2012</i>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                            Proin a ipsum tellus. Interdum et malesuada fames ac ante
-                                                            ipsum primis in faucibus.</p>
-                                                    </div>
-                                                    <ul class="action_job">
-                                                        <li><span>Edit</span><a href="#" title=""><i
-                                                                class="la la-pencil"></i></a></li>
-                                                        <li><span>Delete</span><a href="#" title=""><i
-                                                                class="la la-trash-o"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="edu-history style2">
-                                                    <i></i>
-                                                    <div class="edu-hisinfo">
-                                                        <h3>King LLC</h3>
-                                                        <i>2008 - 2012</i>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                            Proin a ipsum tellus. Interdum et malesuada fames ac ante
-                                                            ipsum primis in faucibus.</p>
-                                                    </div>
-                                                    <ul class="action_job">
-                                                        <li><span>Edit</span><a href="#" title=""><i
-                                                                class="la la-pencil"></i></a></li>
-                                                        <li><span>Delete</span><a href="#" title=""><i
-                                                                class="la la-trash-o"></i></a></li>
-                                                    </ul>
-                                                </div>
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="col-lg-12">
+                                    <button type="submit">Update</button>
+                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!--
+
+        -->
     </section>
 
     <footer>
         <div class="block">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 column">
-                        <div class="widget">
-                            <div class="about_widget">
-                                <div class="logo">
-                                    <a href="#" title=""><img src="http://placehold.it/178x40" alt=""/></a>
-                                </div>
-                                <span>Collin Street West, Victor 8007, Australia.</span>
-                                <span>+1 246-345-0695</span>
-                                <span>info@jobhunt.com</span>
-                                <div class="social">
-                                    <a href="#" title=""><i class="fa fa-facebook"></i></a>
-                                    <a href="#" title=""><i class="fa fa-twitter"></i></a>
-                                    <a href="#" title=""><i class="fa fa-linkedin"></i></a>
-                                    <a href="#" title=""><i class="fa fa-pinterest"></i></a>
-                                    <a href="#" title=""><i class="fa fa-behance"></i></a>
-                                </div>
-                            </div><!-- About Widget -->
-                        </div>
-                    </div>
-                    <div class="col-lg-4 column">
-                        <div class="widget">
-                            <h3 class="footer-title">Frequently Asked Questions</h3>
-                            <div class="link_widgets">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <a href="#" title="">Privacy & Seurty </a>
-                                        <a href="#" title="">Terms of Serice</a>
-                                        <a href="#" title="">Communications </a>
-                                        <a href="#" title="">Referral Terms </a>
-                                        <a href="#" title="">Lending Licnses </a>
-                                        <a href="#" title="">Disclaimers </a>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <a href="#" title="">Support </a>
-                                        <a href="#" title="">How It Works </a>
-                                        <a href="#" title="">For Employers </a>
-                                        <a href="#" title="">Underwriting </a>
-                                        <a href="#" title="">Contact Us</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 column">
-                        <div class="widget">
-                            <h3 class="footer-title">Find Jobs</h3>
-                            <div class="link_widgets">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <a href="#" title="">US Jobs</a>
-                                        <a href="#" title="">Canada Jobs</a>
-                                        <a href="#" title="">UK Jobs</a>
-                                        <a href="#" title="">Emplois en Fnce</a>
-                                        <a href="#" title="">Jobs in Deuts</a>
-                                        <a href="#" title="">Vacatures China</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 column">
-                        <div class="widget">
-                            <div class="download_widget">
-                                <a href="#" title=""><img src="http://placehold.it/230x65" alt=""/></a>
-                                <a href="#" title=""><img src="http://placehold.it/230x65" alt=""/></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="bottom-line">
-            <span>© 2018 Jobhunt All rights reserved. Design by Creative Layers</span>
+            <span>© 2019 iTaleo All rights reserved. Design by Creative Layers</span>
             <a href="#scrollup" class="scrollup" title=""><i class="la la-arrow-up"></i></a>
         </div>
     </footer>
@@ -437,6 +276,111 @@
                                             <span class="pf-title">Institution</span>
                                             <div class="pf-field">
                                                 <input type="text" name="institution">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <button type="submit">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="work-experience-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="col-lg-12 column">
+                    <form method="post" action="{% url 'add_work_experience' %}">
+                        {% csrf_token %}
+                        <div class="padding-left">
+                            <div class="manage-jobs-sec">
+                                <div class="border-title"><h3>Work Experience</h3></div>
+                                <div class="resumeadd-form">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <span class="pf-title">Job Title</span>
+                                            <div class="pf-field">
+                                                <input placeholder="" type="text" name="job_title">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <span class="pf-title">From Date</span>
+                                            <div class="pf-field">
+                                                <input placeholder="" type="date" class="datepicker" name="from_date">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <span class="pf-title">To Date</span>
+                                            <div class="pf-field">
+                                                <input placeholder="" type="date" class="datepicker" name="to_date">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <p class="remember-label">
+                                                <input type="checkbox" name="is_present_job" id="fgfg"><label
+                                                    for="fgfg">Present</label>
+                                            </p>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <span class="pf-title">Company</span>
+                                            <div class="pf-field">
+                                                <input type="text" name="company_name">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <span class="pf-title">Project Details</span>
+                                            <div class="pf-field">
+                                                <textarea name="project_details"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <button type="submit">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="skill-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="col-lg-12 column">
+                    <form method="post" action="{% url 'add_skill_set' %}">
+                        {% csrf_token %}
+                        <div class="padding-left">
+                            <div class="manage-jobs-sec">
+                                <div class="border-title"><h3>Professional Skills</h3></div>
+                                <div class="resumeadd-form">
+                                    <div class="row align-items-end">
+                                        <div class="col-lg-7">
+                                            <span class="pf-title">Skill Name</span>
+                                            <div class="pf-field">
+                                                <input placeholder="" type="text" name="skill_name">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <span class="pf-title">Percentage</span>
+                                            <div class="pf-field">
+                                                <input placeholder="" type="number" max="100" min="0"
+                                                       name="skill_percentage">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">

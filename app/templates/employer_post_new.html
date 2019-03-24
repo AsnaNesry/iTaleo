@@ -108,6 +108,13 @@
 					 		<div class="profile-form-edit">
 					 			<form method="post" action="{% url 'save_job_details' %}">
 									{% csrf_token %}
+									{% if errors %}
+        <ul>
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 					 				<div class="row">
 										<div class="col-lg-12">
 					 						<span class="pf-title">Job Code</span>
@@ -330,12 +337,6 @@
 					 						<div class="pf-field">
 					 							<input type="date" placeholder="" name="application_deadline"/>
 					 						</div>
-					 					</div>
-										<div class="col-lg-6">
-					 						<span class="pf-title">Active</span>
-					 						<div class="pf-field">
-					 							<input type="checkbox" placeholder="" name="active" value="active"/>
-											</div>
 					 					</div>
 					 					<div class="col-lg-6">
 					 						<span class="pf-title">Country</span>
