@@ -135,11 +135,23 @@
 					 						</div>
 					 					</div>
 										<div class="col-lg-12">
-					 						<span class="pf-title">Skill Requirements</span>
+					 						<span class="pf-title">Primary Skills</span>
 					 						<div class="pf-field">
 					 							<input type="text" placeholder="" name="key_skills"/>
 					 						</div>
 					 					</div>
+										<div class="col-lg-12">
+					 						<span class="pf-title">Secondary Skills</span>
+					 						<div class="pf-field">
+					 							<input type="text" placeholder="" name="secondary_skills"/>
+					 						</div>
+					 					</div>
+                                        <div class="col-lg-12">
+                                            <span class="pf-title">Required Knowledge, Skills, and Abilities in detail</span>
+					 						<div class="pf-field">
+                                            <textarea id="skill_detailed_desc" class="skill_detailed_desc" name="skill_detailed_desc" rows="10" placeholder=""></textarea>
+                                            </div>
+                                        </div>
 					 					<div class="col-lg-6">
 					 						<span class="pf-title">Job Type</span>
 					 						<div class="pf-field">
@@ -332,6 +344,12 @@
 												</select>
 					 						</div>
 					 					</div>
+                                        <div class="col-lg-12">
+                                            <span class="pf-title">Education and Career requirement in detail</span>
+					 						<div class="pf-field">
+                                            <textarea id="education_detail_desc" class="education_detail_desc" name="education_detail_desc" rows="10" placeholder=""></textarea>
+                                            </div>
+                                        </div>
 					 					<div class="col-lg-6">
 					 						<span class="pf-title">Application Deadline Date</span>
 					 						<div class="pf-field">
@@ -560,7 +578,40 @@
 			});
 		});
 </script>
+<script>
+    $(".skill_detailed_desc").focus(function() {
+    if(document.getElementById('skill_detailed_desc').value === ''){
+        document.getElementById('skill_detailed_desc').value +='• ';
+	}
+});
+$(".skill_detailed_desc").keyup(function(event){
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+        document.getElementById('skill_detailed_desc').value +='• ';
+	}
+	var txtval = document.getElementById('skill_detailed_desc').value;
+	if(txtval.substr(txtval.length - 1) == '\n'){
+		document.getElementById('skill_detailed_desc').value = txtval.substring(0,txtval.length - 1);
+	}
+});
+</script>
 
-
+<script>
+    $(".education_detail_desc").focus(function() {
+    if(document.getElementById('education_detail_desc').value === ''){
+        document.getElementById('education_detail_desc').value +='• ';
+	}
+});
+$(".education_detail_desc").keyup(function(event){
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+        document.getElementById('education_detail_desc').value +='• ';
+	}
+	var txtval = document.getElementById('education_detail_desc').value;
+	if(txtval.substr(txtval.length - 1) == '\n'){
+		document.getElementById('education_detail_desc').value = txtval.substring(0,txtval.length - 1);
+	}
+});
+</script>
 </body>
 </html>

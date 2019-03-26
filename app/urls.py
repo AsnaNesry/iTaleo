@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views as app_views
+
 urlpatterns = [
     url(r'^create_job/$', TemplateView.as_view(template_name='employer_post_new.html'), name='create_job'),
     url(r'^employer_login/$', TemplateView.as_view(template_name='employer_login.html'), name='employer_login'),
@@ -20,6 +21,14 @@ urlpatterns = [
     url(r'^add_work_experience/$', app_views.add_work_experience, name='add_work_experience'),
     url(r'^add_skill_set/$', app_views.add_skill_set, name='add_skill_set'),
     url(r'^candidate_logout/$', app_views.candidate_logout, name='candidate_logout'),
+    url(r'^save_candidate_basic_details/$', app_views.save_candidate_basic_details,
+        name='save_candidate_basic_details'),
+    url(r'^save_career_details/$', app_views.save_career_details, name='save_career_details'),
+    url(r'^display_experience_and_career_details/$', app_views.display_experience_and_career_details,
+        name='display_experience_and_career_details'),
+    url(r'^search_job/$', app_views.search_job, name='search_job'),
+    url(r'^apply_job/(?P<value>\S+)/', app_views.apply_job, name='apply_job'),
+    url(r'^view_job/(?P<value>\S+)/', app_views.view_job, name='view_job'),
 ]
 
 if settings.DEBUG:

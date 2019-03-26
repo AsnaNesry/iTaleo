@@ -75,10 +75,10 @@
 				 						<a href="/candidate_profile_basic" title=""><i class="la la-user"></i>Basic Details</a>
 				 					</li>
 				 					<li>
-				 						<a href="/candidate_profile_career" title=""><i class="la la-money"></i>Education & Career Details</a>
+				 						<a href="//display_experience_and_career_details" title=""><i class="la la-money"></i>Education & Career Details</a>
 				 					</li>
 									<li>
-				 						<a href="#" title=""><i class="la la-search"></i>Search Job</a>
+				 						<a href="/search_job" title=""><i class="la la-search"></i>Search Job</a>
 				 					</li>
 				 					<li>
 				 						<a href="#" title=""><i class="la la-lock"></i>Change Password</a>
@@ -90,33 +90,47 @@
                     </aside>
                     <div class="col-lg-9 column">
                         <div class="profile-form-edit">
-                            <form>
+                            <form method="post" action="{% url 'save_candidate_basic_details' %}">
+                                {% csrf_token %}
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <button type="submit">Update</button>
                                     </div>
+
                                     <div class="col-lg-6">
                                         <span class="pf-title">Full Name</span>
                                         <div class="pf-field">
-                                            <input type="text" placeholder=""/>
+                                            {% if profile_details.full_name %}
+                                            <input type="text" placeholder="" name="full_name" value="{{	profile_details.full_name }}"/>
+                                            {% else %}
+                                            <input type="text" placeholder="" name="full_name"/>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <span class="pf-title">Job Title</span>
                                         <div class="pf-field">
-                                            <input type="text" placeholder=""/>
+                                            {% if profile_details.job_title %}
+                                            <input type="text" placeholder="" name="job_title" value="{{	profile_details.job_title }}"/>
+                                             {% else %}
+                                            <input type="text" placeholder="" name="job_title"/>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <span class="pf-title">Age</span>
                                         <div class="pf-field">
-                                            <input type="number"/>
+                                            {% if profile_details.age %}
+                                            <input type="number" name="age" value="{{	profile_details.age }}"/>
+                                             {% else %}
+                                             <input type="number" name="age"/>
+                                             {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <span class="pf-title">Experience</span>
                                         <div class="pf-field">
-                                            <select data-placeholder="" class="chosen" name="experience">
+                                            <select data-placeholder="" class="chosen" name="experience" id="experience_tag">
 													<option value="0">0</option>
 													<option value="1">1 Year</option>
 													<option value="2">2 Years</option>
@@ -144,19 +158,28 @@
                                     <div class="col-lg-6">
                                         <span class="pf-title">Current Salary ($)</span>
                                         <div class="pf-field">
-                                            <input type="number"/>
+                                            {% if profile_details.current_salary %}
+                                            <input type="number" name="current_salary" value="{{	profile_details.current_salary }}"/>
+                                            {% else %}
+                                            <input type="number" name="current_salary"/>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <span class="pf-title">Expected Salary($)</span>
                                         <div class="pf-field">
-                                            <input type="number"/>
+                                            {% if profile_details.expected_salary %}
+                                            <input type="number" name="expected_salary" value="{{	profile_details.expected_salary }}"/>
+                                            {% else %}
+
+                                            <input type="number" name="expected_salary"/>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <span class="pf-title">Highest Education</span>
                                         <div class="pf-field">
-                                            <select data-placeholder="Please Select Specialism" class="chosen">
+                                            <select data-placeholder="Please Select Specialism" class="chosen" name="highest_education">
                                                 <option>B.Tech</option>
                                                     <option>M.Tech</option>
                                                     <option>Bsc</option>
@@ -181,7 +204,11 @@
                                     <div class="col-lg-12">
                                         <span class="pf-title">Profile Description</span>
                                         <div class="pf-field">
-                                            <textarea></textarea>
+                                            {% if profile_details.profile_description %}
+                                            <textarea name="profile_description" value="{{	profile_details.profile_description }}"></textarea>
+                                            {% else %}
+                                            <textarea name="profile_description"></textarea>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -190,25 +217,37 @@
                                     <div class="col-lg-4">
                                         <span class="pf-title">Phone Number</span>
                                         <div class="pf-field">
-                                            <input type="text"/>
+                                            {% if profile_details.phone_number %}
+                                            <input type="text" name="phone_number" value="{{	profile_details.phone_number }}"/>
+                                            {% else %}
+                                            <input type="text" name="phone_number"/>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <span class="pf-title">Email</span>
                                         <div class="pf-field">
-                                            <input type="email"/>
+                                            {% if profile_details.email %}
+                                            <input type="email" name="email" value="{{	profile_details.email }}"/>
+                                            {% else %}
+                                            <input type="email" name="email"/>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <span class="pf-title">Website</span>
                                         <div class="pf-field">
-                                            <input type="text"/>
+                                            {% if profile_details.website %}
+                                            <input type="text" name="website" value="{{	profile_details.website }}"/>
+                                            {% else %}
+                                            <input type="text" name="website"/>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <span class="pf-title">Country</span>
                                         <div class="pf-field">
-                                            <select data-placeholder="Please Select Specialism" class="chosen">
+                                            <select data-placeholder="Please Select Specialism" class="chosen" name="country">
                                                 <option>India</option>
                                             </select>
                                         </div>
@@ -216,7 +255,11 @@
                                     <div class="col-lg-6">
                                         <span class="pf-title">City</span>
                                         <div class="pf-field">
-                                             <input type="text"/>
+                                            {% if profile_details.city %}
+                                             <input type="text" name="city" value="{{	profile_details.city }}"/>
+                                            {% else %}
+                                            <input type="text" name="city"/>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <br>

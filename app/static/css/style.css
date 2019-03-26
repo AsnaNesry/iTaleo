@@ -11654,3 +11654,5 @@ header.style4 .account-btns > li a,
     -o-transition: all 0.4s ease 0s;
     transition: all 0.4s ease 0s;
 }
+#skill_detailed_desc {width:100%;}
+#education_detail_desc {width:100%;}

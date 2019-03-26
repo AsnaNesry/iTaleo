@@ -20,12 +20,32 @@ class JobDetails(models.Model):
     qualification = models.CharField(max_length=100)
     application_deadline = models.DateField(blank=True)
     key_skills = models.CharField(max_length=500)
+    secondary_skills = models.CharField(max_length=500, null=True)
     country = models.CharField(max_length=100, blank=True)
     city = models.CharField(max_length=100, blank=True)
     status = models.CharField(max_length=100, default='Active')
     total_applied = models.IntegerField(default=0)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
     creation_date = models.DateTimeField(default=datetime.now)
+    education_detail_desc = models.CharField(max_length=1000, blank=True, null=True)
+    skill_detailed_desc = models.CharField(max_length=1000, blank=True, null=True)
+
+
+class CandidateProfile(models.Model):
+    user_id = models.CharField(max_length=50, primary_key=True, default="abc")
+    full_name = models.CharField(max_length=200, blank=True, null=True)
+    job_title = models.CharField(max_length=200, blank=True, null=True)
+    age = models.IntegerField(default=0, blank=True, null=True)
+    experience = models.IntegerField(default=0, blank=True, null=True)
+    current_salary = models.DecimalField(max_digits=14, decimal_places=2, blank=True, null=True)
+    expected_salary = models.DecimalField(max_digits=14, decimal_places=2, blank=True, null=True)
+    highest_education = models.CharField(max_length=50, blank=True, null=True)
+    profile_description = models.CharField(max_length=1000, blank=True, null=True)
+    phone_number = models.IntegerField(default=0, blank=True, null=True)
+    email = models.EmailField(max_length=30, blank=True, null=True)
+    website = models.CharField(max_length=30, blank=True, null=True)
+    country = models.CharField(max_length=30, blank=True, null=True)
+    city = models.CharField(max_length=30, blank=True, null=True)
 
 
 def __str__(self):
@@ -39,10 +59,22 @@ class JobDetailsForm(ModelForm):
                   'maximum_salary',
                   'career_level', 'minimum_experience', 'maximum_experience', 'required_gender', 'industry',
                   'qualification',
-                  'application_deadline', 'key_skills', 'country', 'city']
+                  'application_deadline', 'key_skills', 'country', 'city', 'secondary_skills', 'education_detail_desc',
+                  'skill_detailed_desc']
+
+
+class CandidateProfileForm(ModelForm):
+    class Meta:
+        model = CandidateProfile
+        fields = ['full_name', 'job_title', 'age', 'experience', 'current_salary', 'expected_salary',
+                  'highest_education', 'profile_description', 'phone_number', 'email', 'website', 'country', 'city']
 
 
 class EducationDetails(models.Model):
+    class Meta:
+        unique_together = (('user_id', 'qualification'),)
+
+    user_id = models.CharField(max_length=50, default="abc")
     qualification = models.CharField(max_length=100)
     specialization = models.CharField(max_length=100)
     from_date = models.DateField()
@@ -58,10 +90,14 @@ class EducationDetailsForm(ModelForm):
 
 
 class WorkExperience(models.Model):
+    class Meta:
+        unique_together = (('user_id', 'job_title'),)
+
+    user_id = models.CharField(max_length=50, default="abc")
     job_title = models.CharField(max_length=100)
     from_date = models.DateField()
     to_date = models.DateField()
-    is_present_job = models.BooleanField(default=False)
+    is_present_job = models.BooleanField(default=False, null=True)
     company_name = models.CharField(max_length=100)
     project_details = models.CharField(max_length=500)
 
@@ -73,6 +109,10 @@ class WorkExperienceForm(ModelForm):
 
 
 class SkillSet(models.Model):
+    class Meta:
+        unique_together = (('user_id', 'skill_name'),)
+
+    user_id = models.CharField(max_length=50, default="abc")
     skill_name = models.CharField(max_length=100)
     skill_percentage = models.IntegerField(default=0)
 
@@ -82,3 +122,10 @@ class SkillSetForm(ModelForm):
         model = SkillSet
         fields = ['skill_name', 'skill_percentage']
 
+
+class JobApplication(models.Model):
+    class Meta:
+        unique_together = (('user_id', 'job_code'),)
+
+    user_id = models.CharField(max_length=50)
+    job_code = models.CharField(max_length=100)

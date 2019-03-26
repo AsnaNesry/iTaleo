@@ -2,14 +2,18 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from django.views import View
 from django.contrib.auth import logout
 from .models import JobDetailsForm
 from .models import JobDetails
 from .models import EducationDetailsForm
 from .models import WorkExperienceForm
 from .models import SkillSetForm
+from .models import CandidateProfileForm
+from .models import CandidateProfile
+from .models import EducationDetails
+from .models import WorkExperience
+from .models import SkillSet
+from .models import JobApplication
 
 
 # Create your views here.
@@ -75,6 +79,8 @@ def candidate_signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
+            user_name_obj = user.username
+            CandidateProfile.objects.create(user_id=user_name_obj)
             return redirect('candidate_dashboard')
         else:
             msg.append("Invalid Registration")
@@ -106,6 +112,19 @@ def candidate_dashboard(request):
 
 
 def candidate_profile_basic(request):
+    user_id = request.user.username
+    basic_details_db = CandidateProfile.objects.all().filter(user_id=user_id)
+    if basic_details_db is not None:
+        return_object = []
+        for element in basic_details_db:
+            return_object = {'full_name': element.full_name, 'job_title': element.job_title, 'age': element.age,
+                             'experience': element.experience, 'current_salary': element.current_salary,
+                             'expected_salary': element.expected_salary,
+                             'highest_education': element.highest_education,
+                             'profile_description': element.profile_description, 'phone_number': element.phone_number,
+                             'email': element.email, 'website': element.website, 'country': element.country,
+                             'city': element.city, }
+        return render(request, 'candidates_profile_basic.html', {'profile_details': return_object})
     return render(request, 'candidates_profile_basic.html')
 
 
@@ -228,3 +247,184 @@ def candidate_logout(request):
     logout(request)
     return redirect('')
 
+
+def save_candidate_basic_details(request):
+    if request.method == 'POST':
+        form = CandidateProfileForm(request.POST)
+        if form.is_valid:
+            user_id = request.user.username
+            full_name = request.POST.get('full_name')
+            job_title = request.POST.get('job_title')
+            age = request.POST.get('age')
+            experience = request.POST.get('experience')
+            current_salary = request.POST.get('current_salary')
+            expected_salary = request.POST.get('expected_salary')
+            highest_education = request.POST.get('highest_education')
+            profile_description = request.POST.get('profile_description')
+            phone_number = request.POST.get('phone_number')
+            email = request.POST.get('email')
+            website = request.POST.get('website')
+            country = request.POST.get('country')
+            city = request.POST.get('city')
+            CandidateProfile.objects.filter(user_id=user_id).update(full_name=full_name, job_title=job_title, age=age,
+                                                                    experience=experience,
+                                                                    current_salary=current_salary,
+                                                                    expected_salary=expected_salary,
+                                                                    highest_education=highest_education,
+                                                                    profile_description=profile_description,
+                                                                    phone_number=phone_number, email=email,
+                                                                    website=website, country=country, city=city)
+    return redirect('/candidate_dashboard')
+
+
+def save_career_details(request):
+    user_id = request.user.username
+    if 'education_details' in request.session:
+        education_details = request.session['education_details']
+        for education in education_details:
+            EducationDetails.objects.update_or_create(user_id=user_id, qualification=education['qualification'],
+                                                      defaults={'specialization': education['specialization'],
+                                                                'from_date': education['from_date'],
+                                                                'to_date': education['to_date'],
+                                                                'percentage': education['percentage'],
+                                                                'institution': education['institution'], })
+    if 'work_experience_details' in request.session:
+        work_experience_details = request.session['work_experience_details']
+        for work_experience in work_experience_details:
+            WorkExperience.objects.update_or_create(user_id=user_id, job_title=work_experience['job_title'],
+                                                    defaults={'is_present_job': work_experience['is_present_job'],
+                                                              'from_date': work_experience['from_date'],
+                                                              'to_date': work_experience['to_date'],
+                                                              'company_name': work_experience['company_name'],
+                                                              'project_details': work_experience['project_details'], })
+    if 'skill_details' in request.session:
+        skill_set_details = request.session['skill_details']
+        for skill_set in skill_set_details:
+            SkillSet.objects.update_or_create(user_id=user_id, skill_name=skill_set['skill_name'],
+                                              defaults={'skill_percentage': skill_set['skill_percentage'],
+                                                        })
+    return redirect('/candidate_dashboard')
+
+
+def display_experience_and_career_details(request):
+    user_id = request.user.username
+    education_details = EducationDetails.objects.all().filter(user_id=user_id)
+    career_details = WorkExperience.objects.all().filter(user_id=user_id)
+    skill_details = SkillSet.objects.all().filter(user_id=user_id)
+    if education_details is not None:
+        education_details_list = []
+        for element in education_details:
+            current_element = {'qualification': element.qualification, 'specialization': element.specialization,
+                               'from_date': str(element.from_date), 'to_date': str(element.to_date),
+                               'percentage': element.percentage, 'institution': element.institution}
+            education_details_list.append(current_element)
+        request.session['education_details'] = education_details_list
+    if career_details is not None:
+        career_details_list = []
+        for element in career_details:
+            current_element = {'job_title': element.job_title, 'is_present_job': element.is_present_job,
+                               'from_date': str(element.from_date), 'to_date': str(element.to_date),
+                               'company_name': element.company_name, 'project_details': element.project_details}
+            career_details_list.append(current_element)
+        request.session['work_experience_details'] = career_details_list
+    if skill_details is not None:
+        skill_details_list = []
+        for element in skill_details:
+            current_element = {'skill_name': element.skill_name, 'skill_percentage': element.skill_percentage}
+            skill_details_list.append(current_element)
+        request.session['skill_details'] = skill_details_list
+    return redirect('candidate_profile_career')
+
+
+def search_job(request):
+    user_id = request.user.username
+    all_jobs = JobDetails.objects.all()
+    applied_jobs = JobApplication.objects.all().filter(user_id=user_id)
+    applied_job_list = []
+    for job in applied_jobs:
+        applied_job_list.append(job.job_code)
+
+    job_list = []
+    for element in all_jobs:
+        job_code = element.job_code
+        job_title = element.job_title
+        key_skills = element.key_skills.replace(',', '  ')
+        city = element.city
+        country = element.country
+        if job_code in applied_job_list:
+            apply_status = 'APPLIED'
+        else:
+            apply_status = 'APPLY NOW'
+        current_element = {'job_code': job_code, 'job_title': job_title, 'key_skills': key_skills, 'city': city,
+                           'country': country, 'apply_status': apply_status, }
+        job_list.append(current_element)
+    return render(request, 'job_search.html', {'job_list': job_list})
+
+
+def apply_job(request, value):
+    user_id = request.user.username
+    job_code = value
+    JobApplication.objects.create(user_id=user_id, job_code=job_code)
+    return redirect('search_job')
+
+
+def view_job(request, value):
+    user_id = request.user.username
+    job_code = value
+    job_details = JobDetails.objects.all().filter(job_code=job_code)
+    applied_jobs = JobApplication.objects.all().filter(user_id=user_id)
+    applied_job_list = []
+    for job in applied_jobs:
+        applied_job_list.append(job.job_code)
+    job_detail = {}
+    skill_description_list = []
+    education_description_list = []
+    if job_details:
+        for job in job_details:
+            job_code = job.job_code
+            job_title = job.job_title
+            job_description = job.job_description
+            job_type = job.job_type
+            job_categories = job.job_categories
+            minimum_salary = job.minimum_salary
+            maximum_salary = job.maximum_salary
+            career_level = job.career_level
+            minimum_experience = job.minimum_experience
+            maximum_experience = job.maximum_experience
+            required_gender = job.required_gender
+            industry = job.industry
+            qualification = job.qualification
+            application_deadline = job.application_deadline
+            key_skills = job.key_skills
+            secondary_skills = job.secondary_skills
+            country = job.country
+            city = job.city
+            status = job.status
+            creation_date = job.creation_date
+            if is_HR(request.user):
+                job_applied = 'employer'
+            elif job_code in applied_job_list:
+                job_applied = 'yes'
+            else:
+                job_applied = 'no'
+            education_detail_desc = job.education_detail_desc
+            skill_detailed_desc = job.skill_detailed_desc
+            if skill_detailed_desc is not None:
+                skill_description_list = skill_detailed_desc.split('• ')
+                del skill_description_list[0]
+            if education_detail_desc is not None:
+                education_description_list = education_detail_desc.split('• ')
+                del education_description_list[0]
+            job_detail = {'job_code': job_code, 'job_title': job_title, 'job_title': job_title,
+                          'job_description': job_description,
+                          'job_type': job_type, 'job_categories': job_categories, 'minimum_salary': minimum_salary,
+                          'maximum_salary': maximum_salary,
+                          'career_level': career_level, 'minimum_experience': minimum_experience,
+                          'maximum_experience': maximum_experience, 'required_gender': required_gender,
+                          'industry': industry, 'qualification': qualification,
+                          'application_deadline': application_deadline, 'key_skills': key_skills,
+                          'secondary_skills': secondary_skills,
+                          'country': country, 'city': city, 'status': status, 'creation_date': creation_date, 'job_applied': job_applied}
+    return render(request, 'job_single_view.html',
+                  {'job_detail': job_detail, 'skill_description_list': skill_description_list,
+                   'education_description_list': education_description_list})
