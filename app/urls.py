@@ -29,6 +29,9 @@ urlpatterns = [
     url(r'^search_job/$', app_views.search_job, name='search_job'),
     url(r'^apply_job/(?P<value>\S+)/', app_views.apply_job, name='apply_job'),
     url(r'^view_job/(?P<value>\S+)/', app_views.view_job, name='view_job'),
+    url(r'^employer_view_job/(?P<value>\S+)/', app_views.view_job, name='employer_view_job'),
+    url(r'^view_applicants/(?P<value>\S+)/', app_views.view_applicants, name='view_applicants'),
+    url(r'^view_profile/(?P<value>\S+)/', app_views.view_profile, name='view_profile'),
 ]
 
 if settings.DEBUG:

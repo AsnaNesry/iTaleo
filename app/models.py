@@ -46,6 +46,7 @@ class CandidateProfile(models.Model):
     website = models.CharField(max_length=30, blank=True, null=True)
     country = models.CharField(max_length=30, blank=True, null=True)
     city = models.CharField(max_length=30, blank=True, null=True)
+    current_company = models.CharField(max_length=100, null=True)
 
 
 def __str__(self):
@@ -67,7 +68,8 @@ class CandidateProfileForm(ModelForm):
     class Meta:
         model = CandidateProfile
         fields = ['full_name', 'job_title', 'age', 'experience', 'current_salary', 'expected_salary',
-                  'highest_education', 'profile_description', 'phone_number', 'email', 'website', 'country', 'city']
+                  'highest_education', 'profile_description', 'phone_number', 'email', 'website', 'country', 'city',
+                  'current_company']
 
 
 class EducationDetails(models.Model):

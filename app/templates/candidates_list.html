@@ -28,7 +28,7 @@
 </div>
 
 <div class="theme-layout" id="scrollup">
-
+	
 
 	<section class="overlape">
 		<div class="block no-padding">
@@ -37,12 +37,7 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="inner-header">
-							<h3>{{ job_detail.job_title }}</h3>
-							<div class="job-statistic">
-								<span>{{ job_detail.job_type }}</span>
-								<p><i class="la la-map-marker"></i> {{ job_detail.city }}, {{ job_detail.country }}</p>
-								<p><i class="la la-calendar-o"></i>Posted on {{ job_detail.creation_date }}</p>
-							</div>
+							<h3>Welcome</h3>
 						</div>
 					</div>
 				</div>
@@ -51,49 +46,26 @@
 	</section>
 
 	<section>
-		<div class="block">
+		<div class="block remove-bottom">
 			<div class="container">
-				<div class="row">
-				 	<div class="col-lg-8 column">
-				 		<div class="job-single-sec">
-				 			<!-- Job Head -->
-				 			<div class="job-details">
-				 				<h3>Job Description</h3>
-				 				<p>{{ job_detail.job_description }}</p>
-				 				<h3>Required Knowledge, Skills, and Abilities</h3>
-				 				<ul>
-				 					{% for skill_description in skill_description_list %}
-				 					<li>{{ skill_description }}</li>
-									{% endfor %}
-				 				</ul>
-				 				<h3>Education + Experience</h3>
-				 				<ul>
-									{% for education_description in education_description_list %}
-				 					<li>{{ education_description }}</li>
-									{% endfor %}
-				 				</ul>
+				 <div class="row no-gape">
+				 	<div class="col-lg-9 column">
+				 		<div class="emply-resume-sec">
+							{% for candidate in candidate_list%}
+				 			<div class="emply-resume-list square">
+				 				<div class="emply-resume-info">
+				 					<h3><a href=/view_profile/{{ candidate.user_id }} title="">{{ candidate.full_name }}</a></h3>
+				 					<span><i>{{ candidate.job_title }} at </i>{{ candidate.current_company }}</span>
+				 					<p><i class="la la-map-marker"></i>{{ candidate.city }} / {{ candidate.country }}</p>
+				 				</div>
+				 				<div class="shortlists">
+				 					<a href="#" title="">Shortlist <i class="la la-plus"></i></a>
+				 				</div>
 				 			</div>
+							{% endfor %}
 				 		</div>
-				 	</div>
-				 	<div class="col-lg-4 column">
-						{% if job_detail.job_applied == 'yes'%}
-				 		<a class="apply-thisjob" title=""><i class="la la-paper-plane"></i>Already applied</a>
-						{% else %}
-						<a class="apply-thisjob" href=/apply_job/{{ job_detail.job_code }} title=""><i class="la la-paper-plane"></i>Apply for job</a>
-						{% endif %}
-				 		<div class="job-overview">
-				 			<h3>Job Overview</h3>
-				 			<ul>
-				 				<li><i class="la la-money"></i><h3>Offerd Salary</h3><span>£{{ job_detail.minimum_salary }} - £2{{ job_detail.maximum_salary }}</span></li>
-				 				<li><i class="la la-mars-double"></i><h3>Gender</h3><span>{{ job_detail.required_gender }}</span></li>
-				 				<li><i class="la la-thumb-tack"></i><h3>Career Level</h3><span>{{ job_detail.career_level }}</span></li>
-				 				<li><i class="la la-puzzle-piece"></i><h3>Industry</h3><span>{{ job_detail.industry }}</span></li>
-				 				<li><i class="la la-shield"></i><h3>Experience</h3><span>{{ job_detail.minimum_experience }} - {{ job_detail.maximum_experience }} Years</span></li>
-				 				<li><i class="la la-line-chart "></i><h3>Qualification</h3><span>{{ job_detail.qualification }}</span></li>
-				 			</ul>
-				 		</div>
-				 	</div>
-				</div>
+					</div>
+				 </div>
 			</div>
 		</div>
 	</section>

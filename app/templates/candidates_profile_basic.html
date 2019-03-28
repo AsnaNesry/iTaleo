@@ -75,7 +75,7 @@
 				 						<a href="/candidate_profile_basic" title=""><i class="la la-user"></i>Basic Details</a>
 				 					</li>
 				 					<li>
-				 						<a href="//display_experience_and_career_details" title=""><i class="la la-money"></i>Education & Career Details</a>
+				 						<a href="/display_experience_and_career_details" title=""><i class="la la-money"></i>Education & Career Details</a>
 				 					</li>
 									<li>
 				 						<a href="/search_job" title=""><i class="la la-search"></i>Search Job</a>
@@ -114,6 +114,16 @@
                                             <input type="text" placeholder="" name="job_title" value="{{	profile_details.job_title }}"/>
                                              {% else %}
                                             <input type="text" placeholder="" name="job_title"/>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <span class="pf-title">Current Company</span>
+                                        <div class="pf-field">
+                                            {% if profile_details.current_company %}
+                                            <input type="text" placeholder="" name="current_company" value="{{	profile_details.current_company }}"/>
+                                             {% else %}
+                                            <input type="text" placeholder="" name="current_company"/>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -379,8 +389,6 @@
 <script src="{% static 'js/select-chosen.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/jquery.scrollbar.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/circle-progress.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/maps3.js' %}" type="text/javascript"></script>
-<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCYc537bQom7ajFpWE5sQaVyz1SQa9_tuY&sensor=true&libraries=places"></script>
 
 
 </body>

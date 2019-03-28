@@ -123,7 +123,7 @@ def candidate_profile_basic(request):
                              'highest_education': element.highest_education,
                              'profile_description': element.profile_description, 'phone_number': element.phone_number,
                              'email': element.email, 'website': element.website, 'country': element.country,
-                             'city': element.city, }
+                             'city': element.city, 'current_company': element.current_company}
         return render(request, 'candidates_profile_basic.html', {'profile_details': return_object})
     return render(request, 'candidates_profile_basic.html')
 
@@ -266,6 +266,7 @@ def save_candidate_basic_details(request):
             website = request.POST.get('website')
             country = request.POST.get('country')
             city = request.POST.get('city')
+            current_company = request.POST.get('current_company')
             CandidateProfile.objects.filter(user_id=user_id).update(full_name=full_name, job_title=job_title, age=age,
                                                                     experience=experience,
                                                                     current_salary=current_salary,
@@ -273,7 +274,8 @@ def save_candidate_basic_details(request):
                                                                     highest_education=highest_education,
                                                                     profile_description=profile_description,
                                                                     phone_number=phone_number, email=email,
-                                                                    website=website, country=country, city=city)
+                                                                    website=website, country=country, city=city,
+                                                                    current_company=current_company)
     return redirect('/candidate_dashboard')
 
 
@@ -379,6 +381,7 @@ def view_job(request, value):
     job_detail = {}
     skill_description_list = []
     education_description_list = []
+    html_page = 'job_single_view.html'
     if job_details:
         for job in job_details:
             job_code = job.job_code
@@ -402,6 +405,7 @@ def view_job(request, value):
             status = job.status
             creation_date = job.creation_date
             if is_HR(request.user):
+                html_page = 'employer_job_single_view.html'
                 job_applied = 'employer'
             elif job_code in applied_job_list:
                 job_applied = 'yes'
@@ -424,7 +428,79 @@ def view_job(request, value):
                           'industry': industry, 'qualification': qualification,
                           'application_deadline': application_deadline, 'key_skills': key_skills,
                           'secondary_skills': secondary_skills,
-                          'country': country, 'city': city, 'status': status, 'creation_date': creation_date, 'job_applied': job_applied}
-    return render(request, 'job_single_view.html',
+                          'country': country, 'city': city, 'status': status, 'creation_date': creation_date,
+                          'job_applied': job_applied}
+    return render(request, html_page,
                   {'job_detail': job_detail, 'skill_description_list': skill_description_list,
                    'education_description_list': education_description_list})
+
+
+def view_applicants(request, value):
+    job_code = value
+    applicant_list = JobApplication.objects.all().filter(job_code=job_code)
+    candidate_list = []
+    if applicant_list:
+        for applicant in applicant_list:
+            user_id = applicant.user_id
+            candidate_details = CandidateProfile.objects.all().filter(user_id=user_id)
+            ranked_candidate_list = rank_profiles(candidate_details, job_code)
+            for candidate in ranked_candidate_list:
+                current_element = {'user_id': candidate.user_id, 'full_name': candidate.full_name,
+                                   'job_title': candidate.job_title, 'current_company': candidate.current_company,
+                                   'city': candidate.city, 'country': candidate.country}
+                candidate_list.append(current_element)
+    return render(request, 'candidates_list.html', {'candidate_list': candidate_list})
+
+
+def rank_profiles(candidate_details, job_code):
+    job_details = JobDetails.objects.all().filter(job_code=job_code)
+    return candidate_details
+
+
+def view_profile(request, value):
+    user_id = value
+    candidate_details_obj = {}
+    candidate_education_list = []
+    candidate_work_experience_list = []
+    candidate_skill_set_list = []
+    candidate_details = CandidateProfile.objects.all().filter(user_id=user_id)
+    candidate_education = EducationDetails.objects.all().filter(user_id=user_id)
+    candidate_work_experience = WorkExperience.objects.all().filter(user_id=user_id)
+    candidate_skill_set = SkillSet.objects.all().filter(user_id=user_id)
+    if candidate_details:
+        for element in candidate_details:
+            candidate_details_obj = {'full_name': element.full_name, 'job_title': element.job_title, 'age': element.age,
+                                     'experience': element.experience, 'current_salary': element.current_salary,
+                                     'expected_salary': element.expected_salary,
+                                     'highest_education': element.highest_education,
+                                     'profile_description': element.profile_description,
+                                     'phone_number': element.phone_number,
+                                     'email': element.email, 'website': element.website, 'country': element.country,
+                                     'city': element.city, 'current_company': element.current_company}
+    if candidate_education:
+        for element in candidate_education:
+            current_element = {'qualification': element.qualification, 'specialization': element.specialization,
+                               'from_date': element.from_date,
+                               'to_date': element.to_date, 'percentage': element.percentage, 'institution': element.institution}
+            candidate_education_list.append(current_element)
+    if candidate_work_experience:
+        for element in candidate_work_experience:
+            current_element = {'job_title': element.job_title, 'is_present_job': element.is_present_job,
+                               'from_date': element.from_date,
+                               'to_date': element.to_date, 'project_details': element.project_details,
+                               'company_name': element.company_name}
+            candidate_work_experience_list.append(current_element)
+    if candidate_skill_set:
+        display_skills = []
+        count = 0
+        for element in candidate_skill_set:
+            current_element = {'skill_name': element.skill_name, 'skill_percentage': element.skill_percentage}
+            candidate_skill_set_list.append(current_element)
+            if count < 3:
+                display_skills.append(element.skill_name)
+                count = count+1
+
+    return render(request, 'employer_candidates_single.html',
+                  {'candidate_details_obj': candidate_details_obj, 'candidate_education_list': candidate_education_list,
+                   'candidate_work_experience_list': candidate_work_experience_list,
+                   'candidate_skill_set_list': candidate_skill_set_list, 'display_skills': display_skills})
