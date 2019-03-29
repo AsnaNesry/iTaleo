@@ -14,9 +14,7 @@ from .models import EducationDetails
 from .models import WorkExperience
 from .models import SkillSet
 from .models import JobApplication
-
-
-# Create your views here.
+import pandas as pd
 
 
 def employer_login(request):
@@ -234,6 +232,14 @@ def add_skill_set(request):
     return redirect('candidate_profile_career')
 
 
+def delete_skill_set(request, value):
+    if 'skill_details' in request.session:
+        skill_details = request.session['skill_details']
+        skill_details[:] = [d for d in skill_details if d.get('skill_name') != value]
+        request.session['skill_details'] = skill_details
+    return redirect('candidate_profile_career')
+
+
 def populate_skill_set(skill_details, return_list):
     if skill_details is not None:
         for num, element in enumerate(skill_details):
@@ -439,22 +445,20 @@ def view_applicants(request, value):
     job_code = value
     applicant_list = JobApplication.objects.all().filter(job_code=job_code)
     candidate_list = []
+    candidate_id_list = []
     if applicant_list:
         for applicant in applicant_list:
-            user_id = applicant.user_id
-            candidate_details = CandidateProfile.objects.all().filter(user_id=user_id)
-            ranked_candidate_list = rank_profiles(candidate_details, job_code)
-            for candidate in ranked_candidate_list:
+            candidate_id_list.append(applicant.user_id)
+        ranked_candidate_name_list = rank_profiles(candidate_id_list, job_code)
+
+        for candidate_name in ranked_candidate_name_list:
+            candidate_db = CandidateProfile.objects.all().filter(user_id=candidate_name)
+            for candidate in candidate_db:
                 current_element = {'user_id': candidate.user_id, 'full_name': candidate.full_name,
                                    'job_title': candidate.job_title, 'current_company': candidate.current_company,
                                    'city': candidate.city, 'country': candidate.country}
                 candidate_list.append(current_element)
     return render(request, 'candidates_list.html', {'candidate_list': candidate_list})
-
-
-def rank_profiles(candidate_details, job_code):
-    job_details = JobDetails.objects.all().filter(job_code=job_code)
-    return candidate_details
 
 
 def view_profile(request, value):
@@ -481,7 +485,8 @@ def view_profile(request, value):
         for element in candidate_education:
             current_element = {'qualification': element.qualification, 'specialization': element.specialization,
                                'from_date': element.from_date,
-                               'to_date': element.to_date, 'percentage': element.percentage, 'institution': element.institution}
+                               'to_date': element.to_date, 'percentage': element.percentage,
+                               'institution': element.institution}
             candidate_education_list.append(current_element)
     if candidate_work_experience:
         for element in candidate_work_experience:
@@ -498,9 +503,43 @@ def view_profile(request, value):
             candidate_skill_set_list.append(current_element)
             if count < 3:
                 display_skills.append(element.skill_name)
-                count = count+1
+                count = count + 1
 
     return render(request, 'employer_candidates_single.html',
                   {'candidate_details_obj': candidate_details_obj, 'candidate_education_list': candidate_education_list,
                    'candidate_work_experience_list': candidate_work_experience_list,
                    'candidate_skill_set_list': candidate_skill_set_list, 'display_skills': display_skills})
+
+
+def rank_profiles(applied_candidate_list, job_code):
+    job_details = JobDetails.objects.all().filter(job_code=job_code)
+    job_primary_skills = []
+    job_secondary_skills = []
+    primary_skill_frame = []
+    secondary_skill_frame = []
+    user_frame = []
+    for job in job_details:
+        job_primary_skills = job.key_skills.split(',')
+        job_secondary_skills = job.secondary_skills.split(',')
+    for candidate in applied_candidate_list:
+        skill_sets = SkillSet.objects.all().filter(user_id=candidate)
+        primary_skill_total = 0
+        secondary_skill_total = 0
+        for skill in skill_sets:
+            if skill.skill_name in job_primary_skills:
+                primary_skill_total = primary_skill_total + skill.skill_percentage
+            elif skill.skill_name in job_secondary_skills:
+                secondary_skill_total = secondary_skill_total + skill.skill_percentage
+        user_frame.append(candidate)
+        primary_skill_frame.append(primary_skill_total)
+        secondary_skill_frame.append(secondary_skill_total)
+
+    my_dict = {'user_id': user_frame,
+               'primary_skills': primary_skill_frame,
+               'secondary_skills': secondary_skill_frame}
+    df = pd.DataFrame(my_dict)
+    df['sorting_column'] = df.primary_skills * 0.6 + df.secondary_skills * 0.3
+    df.sort_values(['sorting_column'], inplace=True, ascending=False)
+    print(df)
+    ranked_user_list = df['user_id'].tolist()
+    return ranked_user_list

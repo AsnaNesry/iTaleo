@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^employer_view_job/(?P<value>\S+)/', app_views.view_job, name='employer_view_job'),
     url(r'^view_applicants/(?P<value>\S+)/', app_views.view_applicants, name='view_applicants'),
     url(r'^view_profile/(?P<value>\S+)/', app_views.view_profile, name='view_profile'),
+    url(r'^delete_skill_set/(?P<value>[\w \/&-]+)/$', app_views.delete_skill_set, name='delete_skill_set'),
 ]
 
 if settings.DEBUG:
