@@ -43,7 +43,7 @@
 
 	<section class="overlape">
 		<div class="block no-padding">
-			<div data-velocity="-.1" style="background: url(http://placehold.it/1600x800) repeat scroll 50% 422.28px transparent;" class="parallax scrolly-invisible no-parallax"></div><!-- PARALLAX BACKGROUND IMAGE -->
+			<div data-velocity="-.1" style="background: url({% static 'images/resource/parallax1.jpg' %}) repeat scroll 50% 422.28px transparent;" class="parallax scrolly-invisible no-parallax"></div><!-- PARALLAX BACKGROUND IMAGE -->
 			<div class="container fluid">
 				<div class="row">
 					<div class="col-lg-12">
@@ -68,7 +68,7 @@
 				 						<a href="/candidate_dashboard" title=""><i class="la la-folder"></i>Candidate Dashboard</a>
 				 					</li>
 				 					<li>
-				 						<a href="/candidate_profile" title=""><i class="la la-file-text"></i>View My Profile</a>
+				 						<a href="/view_profile/{{user.username}}" title=""><i class="la la-file-text"></i>View My Profile</a>
 				 					</li>
 				 					<li>
 				 						<a href="/candidate_profile_basic" title=""><i class="la la-user"></i>Basic Details</a>
@@ -82,7 +82,7 @@
 				 					<li>
 				 						<a href="#" title=""><i class="la la-lock"></i>Change Password</a>
 				 					</li>
-				 					<li><a href="#" title=""><i class="la la-unlink"></i>Logout</a></li>
+				 					<li><a href="/candidate_logout" title=""><i class="la la-unlink"></i>Logout</a></li>
 				 				</ul>
 				 			</div>
 				 		</div>
@@ -95,7 +95,7 @@
 									<div class="row no-gape">
 										<div class="col-lg-4 col-md-4 col-sm-12">
 											<div class="p-category">
-												<a href="/candidate_profile" title="">
+												<a href="/view_profile/{{user.username}}" title="">
 													<i class="la la-file"></i>
 													<span>View My Profile</span>
 												</a>
@@ -135,18 +135,6 @@
 										</div>
 									</div>
 								</div>
-								<div class="cat-sec">
-									<div class="row no-gape">
-										<div class="col-lg-4 col-md-4 col-sm-12">
-											<div class="p-category">
-												<a href="#" title="">
-													<i class="la la-check"></i>
-													<span>Appropriate For Me</span>
-												</a>
-											</div>
-										</div>
-									</div>
-								</div>
 					 		</div>
 					 	</div>
 					</div>
@@ -156,83 +144,8 @@
 	</section>
 
 	<footer>
-		<div class="block">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-3 column">
-						<div class="widget">
-							<div class="about_widget">
-								<div class="logo">
-									<a href="#" title=""><img src="http://placehold.it/178x40" alt="" /></a>
-								</div>
-								<span>Collin Street West, Victor 8007, Australia.</span>
-								<span>+1 246-345-0695</span>
-								<span>info@jobhunt.com</span>
-								<div class="social">
-									<a href="#" title=""><i class="fa fa-facebook"></i></a>
-									<a href="#" title=""><i class="fa fa-twitter"></i></a>
-									<a href="#" title=""><i class="fa fa-linkedin"></i></a>
-									<a href="#" title=""><i class="fa fa-pinterest"></i></a>
-									<a href="#" title=""><i class="fa fa-behance"></i></a>
-								</div>
-							</div><!-- About Widget -->
-						</div>
-					</div>
-					<div class="col-lg-4 column">
-						<div class="widget">
-							<h3 class="footer-title">Frequently Asked Questions</h3>
-							<div class="link_widgets">
-								<div class="row">
-									<div class="col-lg-6">
-										<a href="#" title="">Privacy & Seurty </a>
-										<a href="#" title="">Terms of Serice</a>
-										<a href="#" title="">Communications </a>
-										<a href="#" title="">Referral Terms </a>
-										<a href="#" title="">Lending Licnses </a>
-										<a href="#" title="">Disclaimers </a>	
-									</div>
-									<div class="col-lg-6">
-										<a href="#" title="">Support </a>
-										<a href="#" title="">How It Works </a>
-										<a href="#" title="">For Employers </a>
-										<a href="#" title="">Underwriting </a>
-										<a href="#" title="">Contact Us</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-2 column">
-						<div class="widget">
-							<h3 class="footer-title">Find Jobs</h3>
-							<div class="link_widgets">
-								<div class="row">
-									<div class="col-lg-12">
-										<a href="#" title="">US Jobs</a>	
-										<a href="#" title="">Canada Jobs</a>	
-										<a href="#" title="">UK Jobs</a>	
-										<a href="#" title="">Emplois en Fnce</a>	
-										<a href="#" title="">Jobs in Deuts</a>	
-										<a href="#" title="">Vacatures China</a>	
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 column">
-						<div class="widget">
-							<div class="download_widget">
-								<a href="#" title=""><img src="http://placehold.it/230x65" alt="" /></a>
-								<a href="#" title=""><img src="http://placehold.it/230x65" alt="" /></a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div class="bottom-line">
-			<span>© 2018 Jobhunt All rights reserved. Design by Creative Layers</span>
-			<a href="#scrollup" class="scrollup" title=""><i class="la la-arrow-up"></i></a>
+			<span>© 2019 iTaleo All rights reserved. Design by JECC</span>
 		</div>
 	</footer>
 
@@ -243,10 +156,6 @@
 	<div class="can-detail-s">
 		<div class="cst"><img src="http://placehold.it/145x145" alt="" /></div>
 		<h3>{{user.username}}</h3>
-		<span><i>UX / UI Designer</i> at Atract Solutions</span>
-		<p>creativelayers088@gmail.com</p>
-		<p>Member Since, 2017</p>
-		<p><i class="la la-map-marker"></i>Istanbul / Turkey</p>
 	</div>
 </div><!-- Profile Sidebar -->
 

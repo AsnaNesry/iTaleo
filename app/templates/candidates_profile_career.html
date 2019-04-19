@@ -42,9 +42,8 @@
 
     <section class="overlape">
         <div class="block no-padding">
-            <div data-velocity="-.1"
-                 style="background: url(http://placehold.it/1600x800) repeat scroll 50% 422.28px transparent;"
-                 class="parallax scrolly-invisible no-parallax"></div><!-- PARALLAX BACKGROUND IMAGE -->
+            			<div data-velocity="-.1" style="background: url({% static 'images/resource/parallax1.jpg' %}) repeat scroll 50% 422.28px transparent;" class="parallax scrolly-invisible no-parallax"></div><!-- PARALLAX BACKGROUND IMAGE -->
+
             <div class="container fluid">
                 <div class="row">
                     <div class="col-lg-12">
@@ -61,36 +60,33 @@
         <div class="block no-padding">
             <div class="container">
                 <div class="row no-gape">
-                    <aside class="col-lg-3 column border-right">
-                        <div class="widget">
-                            <div class="tree_widget-sec">
-                                <ul>
-                                    <li>
-                                        <a href="/candidate_dashboard" title=""><i class="la la-folder"></i>Candidate
-                                            Dashboard</a>
-                                    </li>
-                                    <li>
-                                        <a href="/candidate_profile" title=""><i class="la la-file-text"></i>View My
-                                            Profile</a>
-                                    </li>
-                                    <li>
-                                        <a href="/candidate_profile_basic" title=""><i class="la la-user"></i>Basic
-                                            Details</a>
-                                    </li>
-                                    <li>
-                                        <a href="/display_experience_and_career_details" title=""><i class="la la-money"></i>Education & Career Details</a>
-                                    </li>
-                                    <li>
-                                        <a href="/search_job" title=""><i class="la la-search"></i>Search Job</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" title=""><i class="la la-lock"></i>Change Password</a>
-                                    </li>
-                                    <li><a href="/candidate_logout" title=""><i class="la la-unlink"></i>Logout</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </aside>
+				 	<aside class="col-lg-3 column border-right">
+				 		<div class="widget">
+				 			<div class="tree_widget-sec">
+				 				<ul>
+									<li>
+				 						<a href="/candidate_dashboard" title=""><i class="la la-folder"></i>Candidate Dashboard</a>
+				 					</li>
+				 					<li>
+				 						<a href="/view_profile/{{user.username}}" title=""><i class="la la-file-text"></i>View My Profile</a>
+				 					</li>
+				 					<li>
+				 						<a href="/candidate_profile_basic" title=""><i class="la la-user"></i>Basic Details</a>
+				 					</li>
+				 					<li>
+				 						<a href="/display_experience_and_career_details" title=""><i class="la la-money"></i>Education & Career Details</a>
+				 					</li>
+									<li>
+				 						<a href="/search_job" title=""><i class="la la-search"></i>Search Job</a>
+				 					</li>
+				 					<li>
+				 						<a href="#" title=""><i class="la la-lock"></i>Change Password</a>
+				 					</li>
+				 					<li><a href="/candidate_logout" title=""><i class="la la-unlink"></i>Logout</a></li>
+				 				</ul>
+				 			</div>
+				 		</div>
+				 	</aside>
                     <div class="col-lg-9 column">
                         <div class="profile-form-edit">
                             <form method="post" action="{% url 'save_career_details' %}">
@@ -189,13 +185,10 @@
     </section>
 
     <footer>
-        <div class="block">
-        </div>
-        <div class="bottom-line">
-            <span>© 2019 iTaleo All rights reserved. Design by Creative Layers</span>
-            <a href="#scrollup" class="scrollup" title=""><i class="la la-arrow-up"></i></a>
-        </div>
-    </footer>
+		<div class="bottom-line">
+			<span>© 2019 iTaleo All rights reserved. Design by JECC</span>
+		</div>
+	</footer>
 
 </div>
 
@@ -204,10 +197,6 @@
     <div class="can-detail-s">
         <div class="cst"><img src="http://placehold.it/145x145" alt=""/></div>
         <h3>{{user.username}}</h3>
-        <span><i>UX / UI Designer</i> at Atract Solutions</span>
-        <p>creativelayers088@gmail.com</p>
-        <p>Member Since, 2017</p>
-        <p><i class="la la-map-marker"></i>Istanbul / Turkey</p>
     </div>
 </div><!-- Profile Sidebar -->
 

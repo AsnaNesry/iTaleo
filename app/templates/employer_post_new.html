@@ -17,6 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static 'css/chosen.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static 'css/colors/colors.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/autocomplete-input.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
 
@@ -136,15 +137,17 @@
 					 					</div>
 										<div class="col-lg-12">
 					 						<span class="pf-title">Primary Skills</span>
-					 						<div class="pf-field">
-					 							<input type="text" placeholder="" name="key_skills"/>
-					 						</div>
+											<div class="pf-field">
+					 							<input id="key_skills" style="width:400px;" type="text" name="key_skills"/>
+												<div style="clear:both;"></div>
+											</div>
 					 					</div>
 										<div class="col-lg-12">
 					 						<span class="pf-title">Secondary Skills</span>
 					 						<div class="pf-field">
-					 							<input type="text" placeholder="" name="secondary_skills"/>
-					 						</div>
+					 							<input id="secondary_skills" style="width:400px;" type="text" name="secondary_skills"/>
+												<div style="clear:both;"></div>
+											</div>
 					 					</div>
                                         <div class="col-lg-12">
                                             <span class="pf-title">Required Knowledge, Skills, and Abilities in detail</span>
@@ -565,6 +568,7 @@
 <script src="{% static 'js/parallax.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/select-chosen.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/jquery.scrollbar.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/autocomplete-input.js' %}" type="text/javascript"></script>
 <!-- Include Date Range Picker -->
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datepicker.css' %}" />
 <script src="{% static 'js/bootstrap-datepicker.js' %}" type="text/javascript"></script>

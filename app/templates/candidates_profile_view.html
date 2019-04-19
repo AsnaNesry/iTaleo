@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>iTaleo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="CreativeLayers">
+
+    <!-- Styles -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-grid.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chosen.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/colors/colors.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+
+</head>
+<body>
+
+<div class="page-loading">
+    <img src="{% static 'images/loader.gif' %}" alt=""/>
+</div>
+
+<div class="theme-layout" id="scrollup">
+
+    <div class="responsive-header">
+        <div class="responsive-menubar">
+            <div class="res-logo"><a href="index.html" title=""><img src="http://placehold.it/178x40" alt=""/></a></div>
+            <div class="menu-resaction">
+                <div class="res-openmenu">
+                    <img src="images/icon.png" alt=""/> Menu
+                </div>
+                <div class="res-closemenu">
+                    <img src="images/icon2.png" alt=""/> Close
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<header class="stick-top">
+		<div class="menu-sec">
+			<div class="container">
+				<div class="my-profiles-sec">
+					<span>{{user.username}} <i class="la la-bars"></i></span>
+				</div>
+			</div>
+		</div>
+	</header>
+
+    <section class="overlape">
+        <div class="block no-padding">
+            <div data-velocity="-.1"
+                 style="background: url(http://placehold.it/1600x800) repeat scroll 50% 422.28px transparent;"
+                 class="parallax scrolly-invisible no-parallax"></div><!-- PARALLAX BACKGROUND IMAGE -->
+            <div class="container fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="inner-header">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="skills-btn">
+                                            {% for skill in display_skills%}
+                                            <a href="" title="">{{ skill }}</a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="overlape">
+        <div class="block remove-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="cand-single-user">
+                            <div class="share-bar circle">
+                                <a href="#" title="" class="share-google"><i class="la la-google"></i></a><a href="#"
+                                                                                                             title=""
+                                                                                                             class="share-fb"><i
+                                    class="fa fa-facebook"></i></a><a href="#" title="" class="share-twitter"><i
+                                    class="fa fa-twitter"></i></a>
+                            </div>
+                            <div class="can-detail-s">
+                                <div class="cst"><img src="http://placehold.it/145x145" alt=""/></div>
+                                <h3>{{ candidate_details_obj.full_name }}</h3>
+                                <span><i>{{ candidate_details_obj.job_title }}</i> at {{ candidate_details_obj.current_company }}</span>
+                                <p>{{ candidate_details_obj.email }}</p>
+                                <p><i class="la la-map-marker"></i>{{ candidate_details_obj.city }} / {{ candidate_details_obj.country }}</p>
+                            </div>
+                            <div class="download-cv">
+                            </div>
+                        </div>
+                        <ul class="cand-extralink">
+                            <li><a href="#about" title="">About</a></li>
+                            <li><a href="#education" title="">Education</a></li>
+                            <li><a href="#experience" title="">Work Experience</a></li>
+                            <li><a href="#skills" title="">Professional Skills</a></li>
+                        </ul>
+                        <div class="cand-details-sec">
+                            <div class="row">
+                                <div class="col-lg-8 column">
+                                    <div class="cand-details" id="about">
+                                        <h2>Candidates About</h2>
+                                        <p>{{ profile_description }}</p>
+                                        <div class="edu-history-sec" id="education">
+                                            <h2>Education</h2>
+                                            {% for education in candidate_education_list%}
+                                            <div class="edu-history">
+                                                <i class="la la-graduation-cap"></i>
+                                                <div class="edu-hisinfo">
+                                                    <h3>{{ education.qualification }}</h3>
+                                                    <i>{{ education.from_date }} - {{ education.to_date }}</i>
+                                                    <span>{{ education.institution }}<i>{{ education.specialization }}</i></span>
+                                                    <p>{{ education.percentage }}%</p>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="edu-history-sec" id="experience">
+                                            <h2>Work & Experience</h2>
+                                            {% for work in candidate_work_experience_list%}
+                                            <div class="edu-history style2">
+                                                <i></i>
+                                                <div class="edu-hisinfo">
+                                                    <h3>{{ work.job_title }}<span>{{ work.company_name }}</span></h3>
+                                                    <i>{{ work.from_date }} - {{ work.to_date }}</i>
+                                                    <p>{{ work.project_details }}</p>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="progress-sec" id="skills">
+                                            <h2>Professional Skills</h2>
+                                            {% for skill in candidate_skill_set_list%}
+                                            <div class="progress-sec">
+                                                <span>{{ skill.skill_name }}</span>
+                                                <div class="progressbar">
+                                                    <div class="progress" style="width: {{ skill.skill_percentage }}%;">
+                                                        <span>{{ skill.skill_percentage }}%</span></div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 column">
+                                    <div class="job-overview">
+                                        <h3>Candidate Overview</h3>
+                                        <ul>
+                                            <li><i class="la la-money"></i>
+                                                <h3>Current Salary</h3><span>£15,000 - £20,000</span></li>
+                                            <li><i class="la la-mars-double"></i>
+                                                <h3>Gender</h3><span>Female</span></li>
+                                            <li><i class="la la-thumb-tack"></i>
+                                                <h3>Career Level</h3><span>Executive</span></li>
+                                            <li><i class="la la-puzzle-piece"></i>
+                                                <h3>Industry</h3><span>Management</span></li>
+                                            <li><i class="la la-shield"></i>
+                                                <h3>Experience</h3><span>2 Years</span></li>
+                                            <li><i class="la la-line-chart "></i>
+                                                <h3>Highest Qualification</h3><span>Bachelor Degree</span></li>
+                                        </ul>
+                                    </div><!-- Job Overview -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+		<div class="bottom-line">
+			<span>© 2019 iTaleo All rights reserved. Design by JECC</span>
+		</div>
+	</footer>
+
+
+</div>
+<div class="profile-sidebar">
+	<span class="close-profile"><i class="la la-close"></i></span>
+	<div class="can-detail-s">
+		<div class="cst"><img src="http://placehold.it/145x145" alt="" /></div>
+		<h3>{{user.username}}</h3>
+	</div>
+</div><!-- Profile Sidebar -->
+
+<div class="account-popup-area signin-popup-box">
+    <div class="account-popup">
+        <span class="close-popup"><i class="la la-close"></i></span>
+        <h3>User Login</h3>
+        <span>Click To Login With Demo User</span>
+        <div class="select-user">
+            <span>Candidate</span>
+            <span>Employer</span>
+        </div>
+        <form>
+            <div class="cfield">
+                <input type="text" placeholder="Username"/>
+                <i class="la la-user"></i>
+            </div>
+            <div class="cfield">
+                <input type="password" placeholder="********"/>
+                <i class="la la-key"></i>
+            </div>
+            <p class="remember-label">
+                <input type="checkbox" name="cb" id="cb1"><label for="cb1">Remember me</label>
+            </p>
+            <a href="#" title="">Forgot Password?</a>
+            <button type="submit">Login</button>
+        </form>
+        <div class="extra-login">
+            <span>Or</span>
+            <div class="login-social">
+                <a class="fb-login" href="#" title=""><i class="fa fa-facebook"></i></a>
+                <a class="tw-login" href="#" title=""><i class="fa fa-twitter"></i></a>
+            </div>
+        </div>
+    </div>
+</div><!-- LOGIN POPUP -->
+
+
+
+<script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/modernizr.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/script.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/wow.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/slick.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/parallax.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/select-chosen.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/jquery.scrollbar.min.js' %}" type="text/javascript"></script>
+
+</body>
+</html>
+

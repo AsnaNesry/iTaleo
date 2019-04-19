@@ -15,6 +15,7 @@ from .models import WorkExperience
 from .models import SkillSet
 from .models import JobApplication
 import pandas as pd
+import pickle
 
 
 def employer_login(request):
@@ -251,7 +252,7 @@ def populate_skill_set(skill_details, return_list):
 
 def candidate_logout(request):
     logout(request)
-    return redirect('')
+    return redirect('/')
 
 
 def save_candidate_basic_details(request):
@@ -445,11 +446,12 @@ def view_applicants(request, value):
     job_code = value
     applicant_list = JobApplication.objects.all().filter(job_code=job_code)
     candidate_list = []
+    rejected_list = []
     candidate_id_list = []
     if applicant_list:
         for applicant in applicant_list:
             candidate_id_list.append(applicant.user_id)
-        ranked_candidate_name_list = rank_profiles(candidate_id_list, job_code)
+        ranked_candidate_name_list, rejected_candidate_name_list = rank_profiles(candidate_id_list, job_code)
 
         for candidate_name in ranked_candidate_name_list:
             candidate_db = CandidateProfile.objects.all().filter(user_id=candidate_name)
@@ -458,7 +460,15 @@ def view_applicants(request, value):
                                    'job_title': candidate.job_title, 'current_company': candidate.current_company,
                                    'city': candidate.city, 'country': candidate.country}
                 candidate_list.append(current_element)
-    return render(request, 'candidates_list.html', {'candidate_list': candidate_list})
+
+        for candidate_name in rejected_candidate_name_list:
+            candidate_db = CandidateProfile.objects.all().filter(user_id=candidate_name)
+            for candidate in candidate_db:
+                current_element = {'user_id': candidate.user_id, 'full_name': candidate.full_name,
+                                   'job_title': candidate.job_title, 'current_company': candidate.current_company,
+                                   'city': candidate.city, 'country': candidate.country}
+                rejected_list.append(current_element)
+    return render(request, 'candidates_list.html', {'candidate_list': candidate_list, 'rejected_list': rejected_list})
 
 
 def view_profile(request, value):
@@ -504,8 +514,12 @@ def view_profile(request, value):
             if count < 3:
                 display_skills.append(element.skill_name)
                 count = count + 1
-
-    return render(request, 'employer_candidates_single.html',
+    html_page = ''
+    if is_HR(request.user):
+        html_page = 'employer_candidates_single.html'
+    else:
+        html_page = 'candidates_profile_view.html'
+    return render(request, html_page,
                   {'candidate_details_obj': candidate_details_obj, 'candidate_education_list': candidate_education_list,
                    'candidate_work_experience_list': candidate_work_experience_list,
                    'candidate_skill_set_list': candidate_skill_set_list, 'display_skills': display_skills})
@@ -518,6 +532,9 @@ def rank_profiles(applied_candidate_list, job_code):
     primary_skill_frame = []
     secondary_skill_frame = []
     user_frame = []
+    education_frame = []
+    experience_frame = []
+    salary_frame = []
     for job in job_details:
         job_primary_skills = job.key_skills.split(',')
         job_secondary_skills = job.secondary_skills.split(',')
@@ -530,16 +547,38 @@ def rank_profiles(applied_candidate_list, job_code):
                 primary_skill_total = primary_skill_total + skill.skill_percentage
             elif skill.skill_name in job_secondary_skills:
                 secondary_skill_total = secondary_skill_total + skill.skill_percentage
+        candidate_profile = CandidateProfile.objects.filter(user_id=candidate)
+        for profile in candidate_profile:
+            experience_frame.append(profile.experience)
+            salary_frame.append(profile.expected_salary)
+        education_count = EducationDetails.objects.filter(user_id=candidate).count()
+        education_frame.append(education_count)
         user_frame.append(candidate)
         primary_skill_frame.append(primary_skill_total)
         secondary_skill_frame.append(secondary_skill_total)
 
-    my_dict = {'user_id': user_frame,
-               'primary_skills': primary_skill_frame,
-               'secondary_skills': secondary_skill_frame}
-    df = pd.DataFrame(my_dict)
-    df['sorting_column'] = df.primary_skills * 0.6 + df.secondary_skills * 0.3
-    df.sort_values(['sorting_column'], inplace=True, ascending=False)
-    print(df)
-    ranked_user_list = df['user_id'].tolist()
-    return ranked_user_list
+    my_dict = {'salaries': salary_frame,
+               'experience': experience_frame,
+               'primary_skill_score': primary_skill_frame,
+               'secondary_skill_score': secondary_skill_frame,
+               'education': education_frame}
+    input_data_frame = pd.DataFrame(my_dict)
+    loaded_model = pickle.load(open(job_code+'.sav', 'rb'))
+    prediction = loaded_model.predict(input_data_frame)
+    probability = loaded_model.predict_proba(input_data_frame, check_input=True)
+
+    all_detail_list = []
+    for index, user_name in enumerate(user_frame):
+        detail_dict = {'user_id': user_name, 'is_selected': prediction[index], 'score': probability[index][1]}
+        all_detail_list.append(detail_dict)
+    sorted_list = sorted(all_detail_list, key=lambda k: k['score'], reverse=True)
+    print("Dictionary: ", sorted_list)
+    filtered_list = list(filter(lambda d: d['is_selected'] == 1, sorted_list))
+    rejected_list = list(filter(lambda d: d['is_selected'] == 0, sorted_list))
+    selected_user_list = list(map(lambda d: d['user_id'], filtered_list))
+    rejected_user_list = list(map(lambda d: d['user_id'], rejected_list))
+    return selected_user_list, rejected_user_list
+
+
+def view_candidate_profile(request):
+    user_id = request.user.username
