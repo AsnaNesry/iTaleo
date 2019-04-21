@@ -127,7 +127,7 @@ class SkillSetForm(ModelForm):
 
 class JobApplication(models.Model):
     class Meta:
-        unique_together = (('user_id', 'job_code'),)
+        unique_together = (('user_id', 'job_code'))
 
     user_id = models.CharField(max_length=50)
     job_code = models.CharField(max_length=100)

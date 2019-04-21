@@ -442,7 +442,7 @@ def view_job(request, value):
                    'education_description_list': education_description_list})
 
 
-def view_applicants(request, value):
+def view_applicants(request, value):  
     job_code = value
     applicant_list = JobApplication.objects.all().filter(job_code=job_code)
     candidate_list = []
@@ -451,9 +451,9 @@ def view_applicants(request, value):
     if applicant_list:
         for applicant in applicant_list:
             candidate_id_list.append(applicant.user_id)
-        ranked_candidate_name_list, rejected_candidate_name_list = rank_profiles(candidate_id_list, job_code)
+        selected_candidate_name_list, rejected_candidate_name_list = rank_profiles(candidate_id_list, job_code)
 
-        for candidate_name in ranked_candidate_name_list:
+        for candidate_name in selected_candidate_name_list:
             candidate_db = CandidateProfile.objects.all().filter(user_id=candidate_name)
             for candidate in candidate_db:
                 current_element = {'user_id': candidate.user_id, 'full_name': candidate.full_name,
@@ -563,6 +563,8 @@ def rank_profiles(applied_candidate_list, job_code):
                'secondary_skill_score': secondary_skill_frame,
                'education': education_frame}
     input_data_frame = pd.DataFrame(my_dict)
+    print("input_data_frame=", input_data_frame)
+
     loaded_model = pickle.load(open(job_code+'.sav', 'rb'))
     prediction = loaded_model.predict(input_data_frame)
     probability = loaded_model.predict_proba(input_data_frame, check_input=True)
@@ -573,9 +575,9 @@ def rank_profiles(applied_candidate_list, job_code):
         all_detail_list.append(detail_dict)
     sorted_list = sorted(all_detail_list, key=lambda k: k['score'], reverse=True)
     print("Dictionary: ", sorted_list)
-    filtered_list = list(filter(lambda d: d['is_selected'] == 1, sorted_list))
+    selected_list = list(filter(lambda d: d['is_selected'] == 1, sorted_list))
     rejected_list = list(filter(lambda d: d['is_selected'] == 0, sorted_list))
-    selected_user_list = list(map(lambda d: d['user_id'], filtered_list))
+    selected_user_list = list(map(lambda d: d['user_id'], selected_list))
     rejected_user_list = list(map(lambda d: d['user_id'], rejected_list))
     return selected_user_list, rejected_user_list
 

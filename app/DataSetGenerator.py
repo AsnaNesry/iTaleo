@@ -1,10 +1,8 @@
 import csv
 import random
 
-data = [{'mountain': 'Everest', 'height': '8848'},
-        {'mountain': 'K2 ', 'height': '8611'},
-        {'mountain': 'Kanchenjunga', 'height': '8586'}]
 
+job_code = 'JC01'
 random_data = []
 # Success Cases
 for i in range(250):
@@ -13,7 +11,7 @@ for i in range(250):
                    'education': random.randint(3, 4), 'selected': 1}
     random_data.append(random_dict)
 
-# Failure Case 1
+# Failure Case 1 -
 for i in range(50):
     random_dict = {'salaries': random.randint(1000000, 2000000), 'experience': random.randint(4, 8),
                    'primary_skill_score': random.randint(200, 1000), 'secondary_skill_score': random.randint(200, 1000),
@@ -48,7 +46,7 @@ for i in range(50):
                    'education': random.randint(1, 2), 'selected': 0}
     random_data.append(random_dict)
 random.shuffle(random_data)
-with open('dataset.csv', 'w', newline='') as csvFile:
+with open(job_code+'_dataset.csv', 'w', newline='') as csvFile:
     fields = ['salaries', 'experience', 'primary_skill_score', 'secondary_skill_score', 'education', 'selected']
     writer = csv.DictWriter(csvFile, fieldnames=fields)
     writer.writeheader()
